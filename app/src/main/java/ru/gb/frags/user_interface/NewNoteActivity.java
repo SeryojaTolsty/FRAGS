@@ -29,8 +29,8 @@ public class NewNoteActivity extends AppCompatActivity {
         saveNote = findViewById(R.id.new_note_update);
 
         Intent intent = getIntent();
-        Note note = (Note) intent.getSerializableExtra(Constants.NOTE);
         if (intent != null && intent.hasExtra(Constants.NOTE_NEW)) {
+            Note note = (Note) intent.getSerializableExtra(Constants.NOTE);
             id = note.getId();
             title.setText(note.getTitle());
             description.setText(note.getDescription());
