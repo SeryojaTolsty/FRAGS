@@ -22,7 +22,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private Button saveNote;
     private int id = -1;
 
-    private Note page;
+    private Note note;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class EditNoteActivity extends AppCompatActivity {
         saveNote = findViewById(R.id.edit_note_button);
 
         Intent intent = getIntent();
-        Note note = (Note) intent.getSerializableExtra(Constants.NOTE);
-        if (intent == null && intent.hasExtra(Constants.NOTE_NEW)) {
+        if (intent != null && intent.hasExtra(Constants.NOTE)) {
+            Note note = (Note) intent.getSerializableExtra(Constants.NOTE);
             id = note.getId();
             title.setText(note.getTitle());
             description.setText(note.getDescription());
@@ -48,15 +48,15 @@ public class EditNoteActivity extends AppCompatActivity {
         description.setText(note.getDescription());
 
         saveNote.setOnClickListener(view -> {
-            String title = this.title.getText().toString();
-            page.setTitle(title);
+            String title = EditNoteActivity.this.title.getText().toString();
+            this.note.setTitle(title);
 
-            String description = this.description.getText().toString();
-            page.setDescription(description);
-            if (page.getId() == null) {
-                repository.create(page);
+            String description = EditNoteActivity.this.description.getText().toString();
+            this.note.setDescription(description);
+            if (this.note.getId() == null) {
+                repository.create(this.note);
             } else {
-                repository.update(page);
+                repository.update(this.note);
             }
             finish();
         });
