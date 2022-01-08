@@ -1,23 +1,25 @@
 package ru.gb.frags.user_interface;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import ru.gb.frags.R;
 import ru.gb.frags.data.Constants;
+import ru.gb.frags.data.InMemoryRepoImpl;
 import ru.gb.frags.data.Note;
 import ru.gb.frags.data.Repo;
-import ru.gb.frags.data.InMemoryRepoImpl;
 import ru.gb.frags.recycler.NotesAdapter;
 
 public class NotesListActivity extends AppCompatActivity implements NotesAdapter.OnNoteClickListener {
+
+    public static final String NOTE_NEW = "NOTE_NEW";
 
 //    private Repo repository = new InMemoryRepoImpl();
     private Repo repository = InMemoryRepoImpl.getInstance();
@@ -41,7 +43,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         list.setAdapter(adapter) ;
     }
 
-    private void fillRepo() {
+    public void fillRepo() {
         repository.create(new Note("Title 1", "Description 1"));
         repository.create(new Note("Title 2", "Description 2"));
         repository.create(new Note("Title 3", "Description 3"));
@@ -60,11 +62,18 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         repository.create(new Note("Title 16", "Description 16"));
     }
 
+
     @Override
     public void onNoteClick(Note note) {
         Intent intent = new Intent(this, EditNoteActivity.class);
         intent.putExtra(Constants.NOTE, note);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.setNotes(repository.getAll());
     }
 
     @Override
@@ -77,9 +86,19 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.main_create:
-                //TODO запустить EditNoteActivity
+                Intent createIntent = new Intent(this, NewNoteActivity.class);
+                createIntent.putExtra(NOTE_NEW, -1);
+                startActivity(createIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onClickNote(Note note) {
+        Intent editIntent = new Intent(this, EditNoteActivity.class);
+        editIntent.putExtra(NOTE_NEW, note);
+        startActivity(editIntent);
     }
 }
