@@ -26,6 +26,8 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     private RecyclerView list;
     private NotesAdapter adapter;
 
+    private Note note;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +89,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         switch (item.getItemId()){
             case R.id.main_create:
                 Intent createIntent = new Intent(this, NewNoteActivity.class);
-                createIntent.putExtra(NOTE_NEW, -1);
+                createIntent.putExtra(NOTE_NEW, note);
                 startActivity(createIntent);
                 return true;
         }

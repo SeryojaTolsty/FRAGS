@@ -17,7 +17,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private EditText title;
     private EditText description;
     private Button saveNote;
-    private int id = -1;
+    private int id = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +29,11 @@ public class NewNoteActivity extends AppCompatActivity {
         saveNote = findViewById(R.id.new_note_update);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(Constants.NOTE_NEW)) {
-            Note note = (Note) intent.getSerializableExtra(Constants.NOTE);
-            id = note.getId();
-            title.setText(note.getTitle());
-            description.setText(note.getDescription());
+        if (intent.getExtras() != null && intent.hasExtra(Constants.NOTE_NEW)) {
+            Note note = (Note) intent.getSerializableExtra(Constants.NOTE_NEW);
+//            id = note.getId();
+//            title.setText(note.getTitle());
+//            description.setText(note.getDescription());
 
         }
     }
