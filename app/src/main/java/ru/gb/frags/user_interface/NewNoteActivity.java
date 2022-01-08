@@ -60,4 +60,5 @@ public class NewNoteActivity extends AppCompatActivity {
             }
         });
     }
+
 }
