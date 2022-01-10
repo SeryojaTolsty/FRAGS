@@ -21,7 +21,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private EditText title;
     private EditText description;
     private Button saveNote;
-    private int id = -1;
+    private int id;
 
     private Note note;
 
@@ -30,18 +30,18 @@ public class NewNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
 
+
         title = findViewById(R.id.new_note_title);
         description = findViewById(R.id.new_note_description);
         saveNote = findViewById(R.id.new_note_update);
 
         Intent intent = getIntent();
-        if (intent.getExtras() != null && intent.hasExtra(Constants.NOTE_NEW)) {
-            Note note = (Note) intent.getSerializableExtra(Constants.NOTE_NEW);
+        if (intent.getExtras() != null && intent.hasExtra(Constants.NOTE)) {
+            note = (Note) intent.getSerializableExtra(Constants.NOTE_NEW);
         }
         else {
             note = new Note("", "");
         }
-
 
 
         saveNote.setOnClickListener(new View.OnClickListener() {
@@ -60,5 +60,4 @@ public class NewNoteActivity extends AppCompatActivity {
             }
         });
     }
-
 }
