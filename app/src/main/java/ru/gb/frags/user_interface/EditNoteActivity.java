@@ -53,11 +53,13 @@ public class EditNoteActivity extends AppCompatActivity {
             this.note.setTitle(title);
             String description = EditNoteActivity.this.description.getText().toString();
             this.note.setDescription(description);
-            if (this.note.getId() == null) {
+
+            if (this.note.getId() != null) {
                 repository.create(this.note);
             } else {
                 repository.update(this.note);
             }
+
             finish();
         });
 

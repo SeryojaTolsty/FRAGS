@@ -91,9 +91,6 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
                 Intent createIntent = new Intent(this, NewNoteActivity.class);
                 createIntent.putExtra(Constants.NOTE_NEW, note);
                 startActivity(createIntent);
-
-                adapter.setNotes(repository.getAll());
-
                 return true;
         }
         return super.onOptionsItemSelected(item);
