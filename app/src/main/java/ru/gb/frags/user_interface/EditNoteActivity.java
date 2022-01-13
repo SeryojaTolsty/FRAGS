@@ -22,6 +22,8 @@ public class EditNoteActivity extends AppCompatActivity {
     private Button saveNote;
     private int id = 1;
 
+//    private NotesAdapter adapter;
+
     private Note note;
 
     @Override
@@ -40,8 +42,7 @@ public class EditNoteActivity extends AppCompatActivity {
             id = note.getId();
             title.setText(note.getTitle());
             description.setText(note.getDescription());
-        }
-        else {
+        } else {
             note = new Note("", "");
         }
 
@@ -59,7 +60,7 @@ public class EditNoteActivity extends AppCompatActivity {
             } else {
                 repository.update(this.note);
             }
-
+//            adapter.setNotes(repository.onNoteChanges());
             finish();
         });
 

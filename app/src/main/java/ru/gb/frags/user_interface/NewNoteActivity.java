@@ -15,13 +15,15 @@ import ru.gb.frags.data.InMemoryRepoImpl;
 import ru.gb.frags.data.Note;
 import ru.gb.frags.data.Repo;
 
-public class NewNoteActivity extends AppCompatActivity {
+public class NewNoteActivity extends AppCompatActivity  {
 
     private Repo repository = InMemoryRepoImpl.getInstance();
     private EditText title;
     private EditText description;
     private Button saveNote;
     private int id;
+
+//    private NotesAdapter adapter;
 
     private Note note;
 
@@ -56,8 +58,11 @@ public class NewNoteActivity extends AppCompatActivity {
                 } else {
                     repository.update(note);
                 }
+//                adapter.setNotes(repository.onNoteChanges());
                 finish();
             }
         });
     }
+
+
 }

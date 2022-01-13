@@ -9,4 +9,6 @@ public interface Repo {
     void delete(int id);
 
     List<Note> getAll();
+
+//    List<Note> onNoteChanges();
 }
