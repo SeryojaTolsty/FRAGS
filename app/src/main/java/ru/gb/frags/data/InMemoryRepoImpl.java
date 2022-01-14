@@ -63,4 +63,14 @@ public class InMemoryRepoImpl implements Repo {
     public List<Note> getAll() {
         return notes;
     }
+
+//    @Override
+//    public List<Note> onNoteChanges() {
+//        for (int i = 0; i < notes.size(); i++) {
+//            if (notes.get(i).getId() == notes.size()) {
+//                notes.toArray();
+//            }
+//        }
+//        return notes;
+//    }
 }
