@@ -10,5 +10,5 @@ public interface Repo {
 
     List<Note> getAll();
 
-//    List<Note> onNoteChanges();
+
 }

@@ -15,7 +15,7 @@ public class InMemoryRepoImpl implements Repo {
     }
 
     private InMemoryRepoImpl() {
-
+        fillRepo();
     }
 
     private ArrayList<Note> notes = new ArrayList<>();
@@ -42,7 +42,7 @@ public class InMemoryRepoImpl implements Repo {
     @Override
     public void update(Note note) {
         for (int i = 0; i < notes.size(); i++) {
-            if (notes.get(i).getId() == note.getId()) {
+            if (notes.get(i).getId().equals(note.getId())) {
                 notes.set(i, note);
                 break;
             }
@@ -58,6 +58,17 @@ public class InMemoryRepoImpl implements Repo {
             }
         }
     }
+
+
+    public void fillRepo() {
+        create(new Note("Title 1", "Description 1"));
+        create(new Note("Title 2", "Description 2"));
+        create(new Note("Title 3", "Description 3"));
+        create(new Note("Title 4", "Description 4"));
+        create(new Note("Title 5", "Description 5"));
+        create(new Note("Title 6", "Description 6"));
+    }
+
 
     @Override
     public List<Note> getAll() {

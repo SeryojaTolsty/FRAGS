@@ -10,19 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.gb.frags.R;
 import ru.gb.frags.data.Constants;
-import ru.gb.frags.data.InMemoryRepoImpl;
 import ru.gb.frags.data.Note;
-import ru.gb.frags.data.Repo;
 
 public class EditNoteActivity extends AppCompatActivity {
 
-    private Repo repository = InMemoryRepoImpl.getInstance();
     private EditText title;
     private EditText description;
     private Button saveNote;
-    private int id = 1;
-
-//    private NotesAdapter adapter;
+    private int id = -1;
 
     private Note note;
 
@@ -35,32 +30,27 @@ public class EditNoteActivity extends AppCompatActivity {
         description = findViewById(R.id.edit_note_description);
         saveNote = findViewById(R.id.edit_note_button);
 
-
         Intent intent = getIntent();
-        if (intent != null) {
-            note = (Note) intent.getSerializableExtra(Constants.NOTE_NEW);
+        note = (Note) intent.getSerializableExtra(Constants.NOTE);
+        if(note != null) {
             id = note.getId();
             title.setText(note.getTitle());
             description.setText(note.getDescription());
-        } else {
-            note = new Note("", "");
+        }
+        else
+        {
+            note = new Note(-1, "", "");
         }
 
-        title.setText(note.getTitle());
-        description.setText(note.getDescription());
-
         saveNote.setOnClickListener(view -> {
-            String title = EditNoteActivity.this.title.getText().toString();
-            this.note.setTitle(title);
-            String description = EditNoteActivity.this.description.getText().toString();
-            this.note.setDescription(description);
+            note.setTitle(title.getText().toString());
+            note.setDescription(description.getText().toString());
+            note.setId(id);
 
-            if (this.note.getId() != null) {
-                repository.create(this.note);
-            } else {
-                repository.update(this.note);
-            }
-//            adapter.setNotes(repository.onNoteChanges());
+            Intent result = new Intent();
+            result.putExtra(Constants.NOTE, note);
+
+            setResult(RESULT_OK, result);
             finish();
         });
 

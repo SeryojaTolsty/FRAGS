@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,64 +20,25 @@ import ru.gb.frags.recycler.NotesAdapter;
 
 public class NotesListActivity extends AppCompatActivity implements NotesAdapter.OnNoteClickListener {
 
-    public static final String NOTE_NEW = "NOTE_NEW";
-
-//    private Repo repository = new InMemoryRepoImpl();
+    private static final int NOTE_EDIT_ACTIVITY = 555;
     private Repo repository = InMemoryRepoImpl.getInstance();
     private RecyclerView list;
     private NotesAdapter adapter;
-
-    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
-        fillRepo();
-
-        adapter = new NotesAdapter();
-        adapter.setNotes(repository.getAll());
-
-        adapter.setOnNoteClickListener(this);
-
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new NotesAdapter();
+        adapter.setOnNoteClickListener(this);
         list.setAdapter(adapter) ;
-    }
-
-    public void fillRepo() {
-        repository.create(new Note("Title 1", "Description 1"));
-        repository.create(new Note("Title 2", "Description 2"));
-        repository.create(new Note("Title 3", "Description 3"));
-        repository.create(new Note("Title 4", "Description 4"));
-        repository.create(new Note("Title 5", "Description 5"));
-        repository.create(new Note("Title 6", "Description 6"));
-//        repository.create(new Note("Title 7", "Description 7"));
-//        repository.create(new Note("Title 8", "Description 8"));
-//        repository.create(new Note("Title 9", "Description 9"));
-//        repository.create(new Note("Title 10", "Description 10"));
-//        repository.create(new Note("Title 11", "Description 11"));
-//        repository.create(new Note("Title 12", "Description 12"));
-//        repository.create(new Note("Title 13", "Description 13"));
-//        repository.create(new Note("Title 14", "Description 14"));
-//        repository.create(new Note("Title 15", "Description 15"));
-//        repository.create(new Note("Title 16", "Description 16"));
-    }
-
-
-    @Override
-    public void onNoteClick(Note note) {
-        Intent intent = new Intent(this, EditNoteActivity.class);
-        intent.putExtra(Constants.NOTE, note);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         adapter.setNotes(repository.getAll());
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,9 +50,8 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.main_create:
-                Intent createIntent = new Intent(this, NewNoteActivity.class);
-                createIntent.putExtra(Constants.NOTE_NEW, note);
-                startActivity(createIntent);
+                Intent createIntent = new Intent(this, EditNoteActivity.class);
+                startActivityForResult(createIntent, NOTE_EDIT_ACTIVITY);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -100,7 +61,31 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     @Override
     public void onClickNote(Note note) {
         Intent editIntent = new Intent(this, EditNoteActivity.class);
-        editIntent.putExtra(NOTE_NEW, note);
-        startActivity(editIntent);
+        editIntent.putExtra(Constants.NOTE, note);
+        startActivityForResult(editIntent, NOTE_EDIT_ACTIVITY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == NOTE_EDIT_ACTIVITY)
+        {
+            if(resultCode == RESULT_OK && data != null)
+            {
+                Note note = (Note) data.getSerializableExtra(Constants.NOTE);
+                if(note != null)
+                {
+                    if(note.getId() == -1)
+                    {
+                        repository.create(note);
+                    }
+                    else {
+                        repository.update(note);
+                    }
+                    adapter.setNotes(repository.getAll());
+                }
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
